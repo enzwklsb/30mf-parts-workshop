@@ -2,4 +2,4 @@ const CACHE='parts-workshop-v1';const SHELL=["./","./index.html","./catalog.json
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);await cache.addAll(SHELL.map(url=>new Request(url,{cache:'reload'})));await self.skipWaiting();})()));
 self.addEventListener('activate',event=>event.waitUntil(self.clients.claim()));
 self.addEventListener('fetch',event=>{const url=new URL(event.request.url);if(event.request.method!=='GET'||url.origin!==location.origin)return;const hashed=url.pathname.includes('/assets/');event.respondWith((async()=>{const cache=await caches.open(CACHE);if(hashed){const hit=await cache.match(event.request);if(hit)return hit;}try{const response=await fetch(event.request);if(response.ok)await cache.put(event.request,response.clone());return response;}catch(error){const hit=await cache.match(event.request);if(hit)return hit;if(event.request.mode==='navigate'){const index=await cache.match(new URL('index.html',self.registration.scope));if(index)return index;}throw error;}})());});
-// build 0dda4e86b4153e25
+// build 215ec71c0aeb5e9f
